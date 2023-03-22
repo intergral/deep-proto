@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package deep.proto.poll.v1;
+
+import "deep/proto/common/v1/common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.intergral.deep.proto.poll.v1";
+option java_outer_classname = "PollProto";
+option go_package = "github.com/intergral/deep-proto/proto/deep/poll/v1";
+
+message PollRequest {
+  int64 ts = 1; //time message was sent, acts as message id (useful for tracing)
+  string tenantId = 2; //the id used for this tenant (this is either provided in config, or got via some auth/register request)
+  string currentHash = 3; //some id that represents the clients current config, or null if no current config
+  map<string, string> tags = 4; //these are the tags specified for the application (e.g. service_name)
+}
+
+enum ResponseType {
+  NO_CHANGE = 0; // This is sent when the 'currentHash' from the request is the same as the response. So the client should do nothing.
+  UPDATE = 1; // This is sent when the client should process the response to update the config.
+}
+
+message PollResponse {
+  int64 ts = 1; //time message was sent, acts as message id (useful for tracing)
+  string tenantId = 2; //the id used for this tenant (this is either provided in config, or got via some auth/register request)
+  string currentHash = 3; //some id that represents the clients current config, or null if no current config
+  repeated deep.proto.common.v1.TracePointConfig response = 4; // this would be the list of dynamic configs that are to be installed. This should be the full set, not a partial or delta. Can be null if the response type is 'no-change'
+  ResponseType responseType = 5; // This indicates if the config has changed or not. if 'no-change' then 'response' will be null/empty
+}
+
+/**
+This is how the application agent should request the config of the tracepoints.
+ */
+service PollConfig {
+  /**
+  Call this function as often as is required to ensure config is up to date.
+   */
+  rpc poll (PollRequest) returns (PollResponse) {}
+}

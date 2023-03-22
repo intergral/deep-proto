@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package deep.proto.poll.v1;
 
-import "deep/proto/common/v1/common.proto";
+import "deepproto/proto/common/v1/common.proto";
 
 option java_multiple_files = true;
 option java_package = "com.intergral.deep.proto.poll.v1";
@@ -29,12 +29,8 @@ message PollResponse {
   ResponseType responseType = 5; // This indicates if the config has changed or not. if 'no-change' then 'response' will be null/empty
 }
 
-/**
-This is how the application agent should request the config of the tracepoints.
- */
+// This is how the application agent should request the config of the tracepoints.
 service PollConfig {
-  /**
-  Call this function as often as is required to ensure config is up to date.
-   */
+  //Call this function as often as is required to ensure config is up to date.
   rpc poll (PollRequest) returns (PollResponse) {}
 }

@@ -7,19 +7,20 @@ build_python:
   except:
     - tags
   stage: build
-  image: registry.gitlab.com/intergral/docker/build-images/python:pybuild_3_protoc
+  image: otel/build-protobuf
+  variables:
+    - PROTOC=protoc-wrapper
   script:
-    - pip install grpcio-tools
     - ./scripts/python_build.sh
 
 build_python_mstr:
   only:
     - tags
   stage: build
-  image: registry.gitlab.com/intergral/docker/build-images/python:pybuild_3_protoc
+  image: otel/build-protobuf
   script:
     - pip install grpcio-tools build twine
     - sed -i 's/VERSION/${CI_COMMIT_TAG}/' pyproject.toml
     - ./scripts/python_build.sh
     - python -m build build/python
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi build/python/dist/*
+    - python -m twine upload build/python/dist/*

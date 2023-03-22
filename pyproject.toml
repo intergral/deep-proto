@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "deep"
+name = "deep-proto"
 description = "DEEP Python Protobuf"
 readme = "../../README.md"
 license = "Apache-2.0"
@@ -29,8 +29,8 @@ version = "VERSION"
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "src/deep",
+    "src/deepproto",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/deep"]
+packages = ["src/deepproto"]

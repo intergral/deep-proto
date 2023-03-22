@@ -6,9 +6,7 @@ option java_package = "com.intergral.deep.proto.common.v1";
 option java_outer_classname = "CommonProto";
 option go_package = "github.com/intergral/deep-proto/proto/deep/common/v1";
 
-/**
-This is the config of a tracepoint that should be installed by the application agent.
- */
+// This is the config of a tracepoint that should be installed by the application agent.
 message TracePointConfig {
   string id = 1; // The id of the config
   string path = 2; // The path for the file to install in

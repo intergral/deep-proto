@@ -9,7 +9,7 @@ build_python:
   stage: build
   image: otel/build-protobuf
   variables:
-    - PROTOC=protoc-wrapper
+    PROTOC: protoc-wrapper
   script:
     - ./scripts/python_build.sh
 

@@ -35,7 +35,7 @@ message StackFrame {
   string method_name = 2; // This is the method or function name that is being called.
   int32 line_number = 3; //This is the line number where the program is paused.
   optional string class_name = 4; //The class name of where the function is defined
-  optional bool async = 5; //This indicates that the frame is an async frame
+  optional bool is_async = 5; //This indicates that the frame is an async frame
   optional int32 column_number = 6; //This is the column number for the line, primarily used in node.
   optional string transpiled_file_name = 7; //The name of the transpiled file. If we have mappings available we can map the file 'something.js' to the original typescript. This will be the transpiled file name e.g. something.js
   optional string transpiled_line_number = 8; //The transpiled line number

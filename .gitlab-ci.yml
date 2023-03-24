@@ -19,7 +19,7 @@ build_python_mstr:
   stage: build
   image: otel/build-protobuf
   script:
-    - pip install grpcio-tools build twine
+    - pip install build twine
     - sed -i 's/VERSION/${CI_COMMIT_TAG}/' pyproject.toml
     - ./scripts/python_build.sh
     - python -m build build/python

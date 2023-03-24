@@ -1,0 +1,70 @@
+syntax = "proto3";
+package deepproto.proto.tracepoint.v1;
+
+import "deepproto/proto/common/v1/common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.intergral.deep.proto.tracepoint.v1";
+option go_package = "github.com/intergral/deep-proto/proto/deep/tracepoint/v1";
+
+// This is the config of a tracepoint that should be installed by the application agent.
+message TracePointConfig {
+  string id = 1; // The id of the config
+  string path = 2; // The path for the file to install in
+  int32 line_no = 3; // the line number to install on
+  map<string, string> args = 4; // arbitrary key/kay of config values (this can contain conditions, logs, fire counts etc)
+  repeated string watches = 5;  // expressions to evaluate at the this point of the code
+}
+
+message VariableId {
+  string id = 1; // the id to use to look up in the snapshot 'var_lookup'
+  string name = 2; // the name of the variable at the point this id is referenced
+  repeated string modifiers = 3;  // the modifiers (private, static etc) at the point this id is referenced
+}
+
+message Variable {
+  string type = 1; // the type of the variable (e.g string)
+  string value = 2; // the value of the variable as a string. All values are converted to string for simplicity. This can also result in the value being truncated if it is a very large string. Collection types should not be to stringed, instead a summary should be given as the value 'HashSet of size: 10'.
+  string hash = 3; // This is the hash of the object, this is primarily of use in Java/Python, node does not really have global object ids, so this is less useful. However using the debugger apis we are exposed the object id at the time of collection. This can change depending on the script location as well (e.g. the stack frame). We send this object id hashed to obfuscate any data. For non object values (that do not have an object id) we hash the value.
+  repeated VariableId children = 4; // This is a list of children of this variable, using the var ids, requiring them to be looked up in the var lookup
+  optional bool truncated = 5; // true if the value has been truncated
+}
+
+message StackFrame {
+  string file_name = 1; //This is the full path of the file where the line of code is paused.
+  string method_name = 2; // This is the method or function name that is being called.
+  int32 line_number = 3; //This is the line number where the program is paused.
+  optional string class_name = 4; //The class name of where the function is defined
+  optional bool async = 5; //This indicates that the frame is an async frame
+  optional int32 column_number = 6; //This is the column number for the line, primarily used in node.
+  optional string transpiled_file_name = 7; //The name of the transpiled file. If we have mappings available we can map the file 'something.js' to the original typescript. This will be the transpiled file name e.g. something.js
+  optional string transpiled_line_number = 8; //The transpiled line number
+  optional string transpiled_column_number = 9; //The transpiled column number
+  repeated VariableId variables = 10; //This is the list of variables (using var ids) that are present at this point in the code.
+  optional bool app_frame = 11; //This indicates if the frame is from inside the app, or is from a library
+}
+
+message WatchResult {
+  string expression = 1; // the expression executed to collect the data
+  VariableId result = 2;  // the id of the variable that represents the result
+}
+
+message Snapshot {
+  string id = 1; // the client generated id for this snapshot
+  TracePointConfig tracepoint = 2; // the config that was used to generate this snapshot (it could be deleted by the time we look at the data)
+  map<string, Variable> var_lookup = 3; // this is a flat list of all the collected variables for this snapshot, to reduce data size we dereference as much as we can
+  int64 ts = 4; // the time in ms when this snapshot was generated
+  repeated StackFrame frames = 5; // the active frames at the time the snapshot is generated
+  repeated WatchResult watches = 6; // the watches results
+  repeated deepproto.proto.common.v1.KeyValue attributes = 7; // the attributes for this snapshot (e.g file_name or line_no)
+  int64 nanos_duration = 8; // the time in nano seconds it took to collect the data
+  repeated deepproto.proto.common.v1.KeyValue resource = 9; // the resource for this snapshot (e.g service.name)
+}
+
+message SnapshotResponse {
+
+}
+
+service SnapshotService {
+  rpc send (Snapshot) returns (SnapshotResponse) {}
+}

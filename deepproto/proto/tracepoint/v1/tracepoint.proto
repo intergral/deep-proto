@@ -27,7 +27,7 @@ message Variable {
   string value = 2; // the value of the variable as a string. All values are converted to string for simplicity. This can also result in the value being truncated if it is a very large string. Collection types should not be to stringed, instead a summary should be given as the value 'HashSet of size: 10'.
   string hash = 3; // This is the hash of the object, this is primarily of use in Java/Python, node does not really have global object ids, so this is less useful. However using the debugger apis we are exposed the object id at the time of collection. This can change depending on the script location as well (e.g. the stack frame). We send this object id hashed to obfuscate any data. For non object values (that do not have an object id) we hash the value.
   repeated VariableId children = 4; // This is a list of children of this variable, using the var ids, requiring them to be looked up in the var lookup
-  optional bool truncated = 5; // true if the value has been truncated
+  optional bool truncated = 5; // true if the value has been truncatedf
 }
 
 message StackFrame {
@@ -38,15 +38,18 @@ message StackFrame {
   optional bool is_async = 5; //This indicates that the frame is an async frame
   optional int32 column_number = 6; //This is the column number for the line, primarily used in node.
   optional string transpiled_file_name = 7; //The name of the transpiled file. If we have mappings available we can map the file 'something.js' to the original typescript. This will be the transpiled file name e.g. something.js
-  optional string transpiled_line_number = 8; //The transpiled line number
-  optional string transpiled_column_number = 9; //The transpiled column number
+  optional int32 transpiled_line_number = 8; //The transpiled line number
+  optional int32 transpiled_column_number = 9; //The transpiled column number
   repeated VariableId variables = 10; //This is the list of variables (using var ids) that are present at this point in the code.
   optional bool app_frame = 11; //This indicates if the frame is from inside the app, or is from a library
 }
 
 message WatchResult {
   string expression = 1; // the expression executed to collect the data
-  VariableId result = 2;  // the id of the variable that represents the result
+  oneof result {
+    VariableId good_result = 2;  // the id of the variable that represents the result
+    string error_result = 3;  // this is to contain the error message generated if the watch expression fails
+  }
 }
 
 message Snapshot {

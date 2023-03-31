@@ -18,6 +18,7 @@
 
 # This is a general build for the protoc files
 
+PROJECT_ROOT=${PROJECT_ROOT}
 PROTOC=${PROTOC:="docker run --rm -u 1000 -v${PROJECT_ROOT}:${PROJECT_ROOT} -w${PROJECT_ROOT} otel/build-protobuf:latest"}
 OUT_DIR=${OUT_DIR:="-"}
 PROTOC_ARGS=${PROTOC_ARGS:="-"}
@@ -40,7 +41,7 @@ if [[ ${GRPC_PROTOC_ARGS} == "-" ]]; then
   exit 1
 fi
 
-echo "Building using args ${PROTOC_ARGS} ${GRPC_PROTOC_ARGS}"
+echo "Building using args ${PROTOC_ARGS} ${GRPC_PROTOC_ARGS} ${PROJECT_ROOT}"
 
 rm -Rf ${OUT_DIR}
 

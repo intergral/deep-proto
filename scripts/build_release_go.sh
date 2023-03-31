@@ -30,6 +30,9 @@ echo "Building version ${VERSION} for Go"
 
 source ${SCRIPT_DIR}/go_build.sh
 
+git submodule sync --recursive
+git submodule update --remote --recursive
+
 cp -r ${OUT_DIR}/github.com/intergral/go-deep-proto/* ${PROJECT_ROOT}/go-deep-proto
 
 cd ${PROJECT_ROOT}/go-deep-proto

@@ -15,9 +15,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 #
-git submodule sync --recursive
-git submodule update --remote --recursive
-
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 PROJECT_ROOT="$(realpath $(dirname ${SCRIPT_DIR}))"

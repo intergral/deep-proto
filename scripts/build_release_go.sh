@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 
 #
 #    Copyright 2023 Intergral GmbH
@@ -18,13 +17,29 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-PROJECT_ROOT="$(realpath $(dirname ${SCRIPT_DIR}))"
+PROJECT_ROOT="$(realpath $(dirname "SCRIPT_DIR"))"
 
-OUT_DIR="${PROJECT_ROOT}/build/python"
-PROTOC_ARGS=${PROTOC_ARGS:="--python_out=${OUT_DIR}"}
-GRPC_PROTOC_ARGS=${GRPC_PROTOC_ARGS:="--grpc-python_out=${OUT_DIR}"}
+VERSION=${1:-$CI_COMMIT_TAG}
 
-source ${SCRIPT_DIR}/proto_build.sh
+if [[ "${VERSION}-" == "-" ]]; then
+  echo "Must specify version."
+  exit 1
+fi
 
+echo "Building version ${VERSION} for Go"
 
-cp ${PROJECT_ROOT}/pyproject.toml ${OUT_DIR}
+source ${SCRIPT_DIR}/go_build.sh
+
+cp -r ${OUT_DIR}/github.com/intergral/go-deep-proto/* ${PROJECT_ROOT}/go-deep-proto
+
+cd ${PROJECT_ROOT}/go-deep-proto
+
+git add .
+
+git commit -m "Published new api version from $VERSION" || echo "No changes, nothing to commit!"
+
+git push -u origin master
+
+git tag v${VERSION}
+
+git push -u origin v${VERSION} HEAD:master

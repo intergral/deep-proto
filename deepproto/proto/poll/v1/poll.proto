@@ -21,7 +21,7 @@ import "deepproto/proto/tracepoint/v1/tracepoint.proto";
 
 option java_multiple_files = true;
 option java_package = "com.intergral.deep.proto.poll.v1";
-option go_package = "github.com/intergral/deep-proto/proto/deep/poll/v1";
+option go_package = "github.com/intergral/go-deep-proto/poll/v1";
 
 message PollRequest {
   int64 ts = 1; //time message was sent, acts as message id (useful for tracing)

@@ -17,7 +17,7 @@ package deepproto.proto.common.v1;
 
 option java_multiple_files = true;
 option java_package = "com.intergral.deep.proto.common.v1";
-option go_package = "github.com/intergral/deep-proto/proto/deep/common/v1";
+option go_package = "github.com/intergral/go-deep-proto/common/v1";
 
 
 // AnyValue is used to represent any type of attribute value. AnyValue may contain a

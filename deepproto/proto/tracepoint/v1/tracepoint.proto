@@ -19,7 +19,7 @@ import "deepproto/proto/common/v1/common.proto";
 
 option java_multiple_files = true;
 option java_package = "com.intergral.deep.proto.tracepoint.v1";
-option go_package = "github.com/intergral/deep-proto/proto/deep/tracepoint/v1";
+option go_package = "github.com/intergral/go-deep-proto/tracepoint/v1";
 
 // This is the config of a tracepoint that should be installed by the application agent.
 message TracePointConfig {

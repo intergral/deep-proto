@@ -1,0 +1,3 @@
+[submodule "go-deep-proto"]
+	path = go-deep-proto
+	url = git@github.com:intergral/go-deep-proto.git

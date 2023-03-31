@@ -15,16 +15,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 #
+git submodule sync --recursive
+git submodule update --remote --recursive
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 PROJECT_ROOT="$(realpath $(dirname ${SCRIPT_DIR}))"
 
-OUT_DIR="${PROJECT_ROOT}/build/python"
-PROTOC_ARGS=${PROTOC_ARGS:="--python_out=${OUT_DIR}"}
-GRPC_PROTOC_ARGS=${GRPC_PROTOC_ARGS:="--grpc-python_out=${OUT_DIR}"}
+OUT_DIR="${PROJECT_ROOT}/build/go"
+PROTOC_ARGS=${PROTOC_ARGS:="--go_out=${OUT_DIR}"}
+GRPC_PROTOC_ARGS=${GRPC_PROTOC_ARGS:="--go-grpc_out=${OUT_DIR}"}
 
 source ${SCRIPT_DIR}/proto_build.sh
 
-
-cp ${PROJECT_ROOT}/pyproject.toml ${OUT_DIR}

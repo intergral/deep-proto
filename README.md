@@ -1,4 +1,6 @@
 ![PyPI](https://img.shields.io/pypi/v/deep-proto)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/intergral/go-deep-proto?label=golang)
+
 
 # Language Independent Interface Types For DEEP
 
@@ -11,3 +13,4 @@ The compiled files are published to central repositories (Maven, ...).
 To generate the raw gRPC client libraries, use `make gen-${LANGUAGE}`. Currently supported languages are:
 
 * python
+* golang

@@ -59,22 +59,21 @@ rel-python: check-version gen-python
 	python -m twine upload $(PROJECT_ROOT)/build/python/dist/*
 
 
-
 .PHONY: rel-go
 rel-go: check-version gen-go
-	git submodule sync --recursive
-	git submodule update --remote --recursive
+	rm -Rf $(PROJECT_ROOT)/go-deep-proto
+	git submodule update --init
 
 	cp -r $(ROOT_DIR)/build/go/github.com/intergral/go-deep-proto/* $(ROOT_DIR)/go-deep-proto
 
-	cd $(PROJECT_ROOT)/go-deep-proto
+	cd $(PROJECT_ROOT)/go-deep-proto; git pull origin master
 
-	git add .
+	cd $(PROJECT_ROOT)/go-deep-proto; git add .
 
-	git commit -m "Published new api version from $VERSION" || echo "No changes, nothing to commit!"
+	cd $(PROJECT_ROOT)/go-deep-proto; git commit -m "Published new api version from $(VERSION)" || echo "No changes, nothing to commit!"
 
-	git push -u origin master
+	cd $(PROJECT_ROOT)/go-deep-proto; git push -u origin HEAD:master
 
-	git tag v${VERSION}
+	cd $(PROJECT_ROOT)/go-deep-proto; git tag v$(VERSION)
 
-	git push -u origin v${VERSION} HEAD:master
+	cd $(PROJECT_ROOT)/go-deep-proto; git push -u origin v$(VERSION)

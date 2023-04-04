@@ -13,7 +13,7 @@ ifndef GRPC_PROTOC_ARGS
 	$(error GRPC_PROTOC_ARGS variable was not defined)
 endif
 
-DOCKER_PROTOBUF_IMAGE ?= otel/build-protobuf:0.14.0
+DOCKER_PROTOBUF_IMAGE ?= otel/build-protobuf:latest
 PROTOC = docker run --rm -u ${shell id -u} -v${PWD}:${PWD} -w${PWD} ${DOCKER_PROTOBUF_IMAGE} --proto_path=${PWD}
 ROOT_DIR=$(shell pwd)
 

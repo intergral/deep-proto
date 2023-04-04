@@ -29,8 +29,8 @@ version = "VERSION"
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "src/deepproto",
+    "deepproto",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/deepproto"]
+packages = ["deepproto"]

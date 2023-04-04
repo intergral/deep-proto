@@ -41,7 +41,7 @@ message Variable {
   string value = 2; // the value of the variable as a string. All values are converted to string for simplicity. This can also result in the value being truncated if it is a very large string. Collection types should not be to stringed, instead a summary should be given as the value 'HashSet of size: 10'.
   string hash = 3; // This is the hash of the object, this is primarily of use in Java/Python, node does not really have global object ids, so this is less useful. However using the debugger apis we are exposed the object id at the time of collection. This can change depending on the script location as well (e.g. the stack frame). We send this object id hashed to obfuscate any data. For non object values (that do not have an object id) we hash the value.
   repeated VariableId children = 4; // This is a list of children of this variable, using the var ids, requiring them to be looked up in the var lookup
-  optional bool truncated = 5; // true if the value has been truncatedf
+  optional bool truncated = 5; // true if the value has been truncated
 }
 
 message StackFrame {
@@ -67,7 +67,7 @@ message WatchResult {
 }
 
 message Snapshot {
-  string id = 1; // the client generated id for this snapshot
+  bytes id = 1; // the client generated id for this snapshot
   TracePointConfig tracepoint = 2; // the config that was used to generate this snapshot (it could be deleted by the time we look at the data)
   map<string, Variable> var_lookup = 3; // this is a flat list of all the collected variables for this snapshot, to reduce data size we dereference as much as we can
   int64 ts = 4; // the time in ms when this snapshot was generated

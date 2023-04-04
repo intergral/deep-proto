@@ -48,7 +48,7 @@ rm -Rf ${OUT_DIR}
 mkdir -p ${OUT_DIR}
 
 # All proto files need to be processed as proto
-for f in $(find ${PROJECT_ROOT}/deepproto -name '*.proto'); do ${PROTOC} --proto_path ${PROJECT_ROOT} ${PROTOC_ARGS} $f; done
+for f in $(find ${PROJECT_ROOT}/deepproto -name '*.proto'); do ${PROTOC}  --proto_path ${PROJECT_ROOT} ${PROTOC_ARGS} $f; done
 
 # only proto files with services need to be generated with grpc
 eval "${PROTOC} --proto_path ${PROJECT_ROOT} ${PROTOC_ARGS} ${GRPC_PROTOC_ARGS} ${PROJECT_ROOT}/deepproto/proto/poll/v1/poll.proto"

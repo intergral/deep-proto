@@ -62,11 +62,13 @@ rel-python: check-version gen-python
 .PHONY: rel-go
 rel-go: check-version gen-go
 	rm -Rf $(PROJECT_ROOT)/go-deep-proto
+
 	git submodule update --init
+
+	cd $(PROJECT_ROOT)/go-deep-proto; git pull origin master
 
 	cp -r $(ROOT_DIR)/build/go/github.com/intergral/go-deep-proto/* $(ROOT_DIR)/go-deep-proto
 
-	cd $(PROJECT_ROOT)/go-deep-proto; git pull origin master
 
 	cd $(PROJECT_ROOT)/go-deep-proto; git add .
 

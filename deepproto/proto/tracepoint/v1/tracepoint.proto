@@ -25,7 +25,7 @@ option go_package = "github.com/intergral/go-deep-proto/tracepoint/v1";
 message TracePointConfig {
   string ID = 1; // The ID of the config
   string path = 2; // The path for the file to install in
-  int32 line_no = 3; // the line number to install on
+  uint32 line_number = 3; // the line number to install on
   map<string, string> args = 4; // arbitrary key/kay of config values (this can contain conditions, logs, fire counts etc)
   repeated string watches = 5;  // expressions to evaluate at the this point of the code
 }
@@ -47,13 +47,13 @@ message Variable {
 message StackFrame {
   string file_name = 1; //This is the full path of the file where the line of code is paused.
   string method_name = 2; // This is the method or function name that is being called.
-  int32 line_number = 3; //This is the line number where the program is paused.
+  uint32 line_number = 3; //This is the line number where the program is paused.
   optional string class_name = 4; //The class name of where the function is defined
   optional bool is_async = 5; //This indicates that the frame is an async frame
-  optional int32 column_number = 6; //This is the column number for the line, primarily used in node.
+  optional uint32 column_number = 6; //This is the column number for the line, primarily used in node.
   optional string transpiled_file_name = 7; //The name of the transpiled file. If we have mappings available we can map the file 'something.js' to the original typescript. This will be the transpiled file name e.g. something.js
-  optional int32 transpiled_line_number = 8; //The transpiled line number
-  optional int32 transpiled_column_number = 9; //The transpiled column number
+  optional uint32 transpiled_line_number = 8; //The transpiled line number
+  optional uint32 transpiled_column_number = 9; //The transpiled column number
   repeated VariableID variables = 10; //This is the list of variables (using var ids) that are present at this point in the code.
   optional bool app_frame = 11; //This indicates if the frame is from inside the app, or is from a library
 }
@@ -70,11 +70,11 @@ message Snapshot {
   bytes ID = 1; // the client generated ID for this snapshot
   TracePointConfig tracepoint = 2; // the config that was used to generate this snapshot (it could be deleted by the time we look at the data)
   map<string, Variable> var_lookup = 3; // this is a flat list of all the collected variables for this snapshot, to reduce data size we dereference as much as we can
-  int64 ts = 4; // the time in ms when this snapshot was generated
+  fixed64 ts_nanos = 4; // the time in nanos since 1970 when this snapshot was generated
   repeated StackFrame frames = 5; // the active frames at the time the snapshot is generated
   repeated WatchResult watches = 6; // the watches results
   repeated deepproto.proto.common.v1.KeyValue attributes = 7; // the attributes for this snapshot (e.g file_name or line_no)
-  int64 nanos_duration = 8; // the time in nano seconds it took to collect the data
+  uint64 nanos_duration = 8; // the time in nano seconds it took to collect the data
   repeated deepproto.proto.common.v1.KeyValue resource = 9; // the resource for this snapshot (e.g service.name)
 }
 

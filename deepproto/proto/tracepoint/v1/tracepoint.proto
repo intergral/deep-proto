@@ -74,7 +74,7 @@ message Snapshot {
   repeated StackFrame frames = 5; // the active frames at the time the snapshot is generated
   repeated WatchResult watches = 6; // the watches results
   repeated deepproto.proto.common.v1.KeyValue attributes = 7; // the attributes for this snapshot (e.g file_name or line_no)
-  uint64 nanos_duration = 8; // the time in nano seconds it took to collect the data
+  uint64 duration_nanos = 8; // the time in nano seconds it took to collect the data
   repeated deepproto.proto.common.v1.KeyValue resource = 9; // the resource for this snapshot (e.g service.name)
 }
 

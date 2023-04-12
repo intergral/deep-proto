@@ -32,8 +32,9 @@ message TracePointConfig {
 
 message VariableID {
   string ID = 1; // the ID to use to look up in the snapshot 'var_lookup'
-  string name = 2; // the name of the variable at the point this ID is referenced
+  string name = 2; // the name of the variable at the point this ID is referenced (this might be modified to better match source code)
   repeated string modifiers = 3;  // the modifiers (private, static etc) at the point this ID is referenced
+  optional string original_name = 4; // the unmodified name from the engine
 }
 
 message Variable {

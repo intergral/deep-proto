@@ -28,6 +28,7 @@ message TracePointConfig {
   uint32 line_number = 3; // the line number to install on
   map<string, string> args = 4; // arbitrary key/kay of config values (this can contain conditions, logs, fire counts etc)
   repeated string watches = 5;  // expressions to evaluate at the this point of the code
+  repeated deepproto.proto.common.v1.KeyValue targeting = 6; // the targeting config for this tracepoint
 }
 
 message VariableID {

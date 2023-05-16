@@ -38,6 +38,12 @@ gen-python:
 gen-go:
 	OUT_DIR=$(ROOT_DIR)/build/go PROTOC_ARGS=--go_out=$(ROOT_DIR)/build/go GRPC_PROTOC_ARGS=--go-grpc_out=$(ROOT_DIR)/build/go $(MAKE) gen-proto
 
+.PHONY: gen-java
+gen-java:
+	OUT_DIR=$(ROOT_DIR)/build/java/src/main/java PROTOC_ARGS=--java_out=$(ROOT_DIR)/build/java/src/main/java GRPC_PROTOC_ARGS=--grpc-java_out=$(ROOT_DIR)/build/java/src/main/java $(MAKE) gen-proto
+	cp $(ROOT_DIR)/pom.xml $(ROOT_DIR)/build/java/pom.xml
+	mvn -f $(ROOT_DIR)/build/java/pom.xml clean package
+
 .PHONY: check-version
 check-version:
 ifdef v
@@ -79,3 +85,20 @@ rel-go: check-version gen-go
 	cd $(PROJECT_ROOT)/go-deep-proto; git tag v$(VERSION)
 
 	cd $(PROJECT_ROOT)/go-deep-proto; git push -u origin v$(VERSION)
+
+
+check-java-env:
+ifndef OSS_PASSWORD
+	$(error OSS_PASSWORD must be defined)
+endif
+ifndef OSS_USERNAME
+	$(error OSS_USERNAME must be defined)
+endif
+ifndef GPG_PASSPHRASE
+	$(error GPG_PASSPHRASE must be defined)
+endif
+
+.PHONY: rel-java
+rel-java: check-version check-java-env gen-java
+	mvn -f $(ROOT_DIR)/build/java/pom.xml versions:set -DnewVersion=$(VERSION)
+	mvn -f $(ROOT_DIR)/build/java/pom.xml -s .ci-settings.xml clean deploy -P release-ossrh -B -U

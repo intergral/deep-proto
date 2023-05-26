@@ -5,7 +5,7 @@ on:
     types: [published]
 
 env:
-  VERSION: $GITHUB_REF
+  VERSION: ${{ GITHUB_REF }}
   OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
   OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
@@ -22,11 +22,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.GO_DEPLOY_KEY }}
-
-      - name: Configure Git
-        run: | 
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
 
       - name: Generate Go Proto
         run: make rel-go

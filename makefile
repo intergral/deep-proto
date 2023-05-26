@@ -85,7 +85,7 @@ rel-go: check-version gen-go
 
 	cd $(PROJECT_ROOT)/go-deep-proto; git add .
 
-	cd $(PROJECT_ROOT)/go-deep-proto; git commit -m "Published new api version from $(VERSION)" || echo "No changes, nothing to commit!"
+	cd $(PROJECT_ROOT)/go-deep-proto; git commit --author="Github <action@github.com>" -m "Published new api version from $(VERSION)" || echo "No changes, nothing to commit!"
 
 	cd $(PROJECT_ROOT)/go-deep-proto; git push -u origin HEAD:master
 

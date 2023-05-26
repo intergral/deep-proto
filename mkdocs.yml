@@ -1,4 +1,6 @@
 site_name: Deep Proto Docs
+site_url: https://intergral.github.io/deep-proto/
+
 theme:
   name: material
 

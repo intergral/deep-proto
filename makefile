@@ -63,13 +63,22 @@ ifndef VERSION
 	$(error VERSION argument must be defined. (make rel-python VERSION=0.0.2))
 endif
 
+.PHONY: check-python-vars
+check-python-vars:
+ifndef TWINE_USER
+	$(error TWINE_USER argument must be defined.)
+endif
+ifndef TWINE_PASSWORD
+	$(error TWINE_PASSWORD argument must be defined.)
+endif
+
 .PHONY: rel-python
-rel-python: check-version gen-python
+rel-python: check-version check-python-vars gen-python
 	sed -i "s/VERSION/$(VERSION)/" $(ROOT_DIR)/build/python/pyproject.toml
 
 	python -m build $(PROJECT_ROOT)/build/python
 
-	python -m twine upload $(PROJECT_ROOT)/build/python/dist/*
+	python -m twine upload -u $(TWINE_USER) -p $(TWINE_PASSWORD) $(PROJECT_ROOT)/build/python/dist/*
 
 
 .PHONY: rel-go
@@ -110,5 +119,5 @@ endif
 
 .PHONY: rel-java
 rel-java: check-version check-java-env gen-java
-	mvn -f $(ROOT_DIR)/build/java/pom.xml versions:set -DnewVersion=$(VERSION)
+	mvn -f $(ROOT_DIR)/build/java/pom.xml versions:set -DnewVersion=$(VERSION) -B -U
 	mvn -f $(ROOT_DIR)/build/java/pom.xml -s .ci-settings.xml clean deploy -P release-ossrh -B -U

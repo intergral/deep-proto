@@ -25,6 +25,9 @@ jobs:
 
   buildPython:
     runs-on: ubuntu-latest
+    env:
+      TWINE_USER: __token__
+      TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python

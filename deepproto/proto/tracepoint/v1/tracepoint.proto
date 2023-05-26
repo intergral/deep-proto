@@ -58,6 +58,7 @@ message StackFrame {
   optional uint32 transpiled_column_number = 9; //The transpiled column number
   repeated VariableID variables = 10; //This is the list of variables (using var ids) that are present at this point in the code.
   optional bool app_frame = 11; //This indicates if the frame is from inside the app, or is from a library
+  optional bool native_frame = 12; //This indicates if the frame, from a native library (primarily used in Java)
 }
 
 message WatchResult {

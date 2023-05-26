@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := gen-all
 
 PROJECT_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
@@ -43,6 +44,12 @@ gen-java:
 	OUT_DIR=$(ROOT_DIR)/build/java/src/main/java PROTOC_ARGS=--java_out=$(ROOT_DIR)/build/java/src/main/java GRPC_PROTOC_ARGS=--grpc-java_out=$(ROOT_DIR)/build/java/src/main/java $(MAKE) gen-proto
 	cp $(ROOT_DIR)/pom.xml $(ROOT_DIR)/build/java/pom.xml
 	mvn -f $(ROOT_DIR)/build/java/pom.xml clean package
+
+.PHONY: gen-all
+gen-all:
+	$(MAKE) gen-go
+	$(MAKE) gen-python
+	$(MAKE) gen-java
 
 .PHONY: check-version
 check-version:

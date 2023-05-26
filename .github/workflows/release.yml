@@ -5,7 +5,7 @@ on:
     types: [published]
 
 env:
-  VERSION: ${{ GITHUB_REF }}
+  VERSION: ${{ github.ref_name }}
   OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
   OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

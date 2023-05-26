@@ -23,6 +23,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GO_DEPLOY_KEY }}
 
+      - name: Configure Git
+        run: | 
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
       - name: Generate Go Proto
         run: make rel-go
 

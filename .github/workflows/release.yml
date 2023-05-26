@@ -18,6 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.GO_DEPLOY_KEY }}
+
       - name: Generate Go Proto
         run: make rel-go
 

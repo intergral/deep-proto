@@ -1,6 +1,11 @@
 site_name: Deep Proto Docs
 site_url: https://intergral.github.io/deep-proto/
 
+repo_name: Deep Proto
+repo_url: https://github.com/intergral/deep-proto
+
+copyright: Intergral GmbH 2023
+
 theme:
   name: material
 

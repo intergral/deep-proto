@@ -26,65 +26,68 @@ option go_package = "github.com/intergral/go-deep-proto/tracepoint/v1";
 message TracePointConfig {
   string ID = 1; // The ID of the config
   string path = 2; // The path for the file to install in
-  uint32 line_number = 3; // the line number to install on
-  map<string, string> args = 4; // arbitrary key/kay of config values (this can contain conditions, logs, fire counts etc)
-  repeated string watches = 5;  // expressions to evaluate at the this point of the code
-  repeated deepproto.proto.common.v1.KeyValue targeting = 6; // the targeting config for this tracepoint
+  uint32 line_number = 3; // The line number to install on
+  map<string, string> args = 4; // Arbitrary key/kay of config values (this can contain conditions, logs, fire counts etc)
+  repeated string watches = 5;  // Expressions to evaluate at the this point of the code
+  repeated deepproto.proto.common.v1.KeyValue targeting = 6; // The targeting config for this tracepoint, used by the server to filter response.
 }
 
-/**
-  The
- */
+// VariableID is used to identify a variable on a stack frame or as a child of another variable.
 message VariableID {
-  string ID = 1; // the ID to use to look up in the snapshot 'var_lookup'
-  string name = 2; // the name of the variable at the point this ID is referenced (this might be modified to better match source code)
-  repeated string modifiers = 3;  // the modifiers (private, static etc) at the point this ID is referenced
-  optional string original_name = 4; // the unmodified name from the engine
+  string ID = 1; // The ID to use to look up in the snapshot 'var_lookup'
+  string name = 2; // The name of the variable at the point this ID is referenced.
+  repeated string modifiers = 3;  // The modifiers (private, static etc) at the point this ID is referenced
+  optional string original_name = 4; // The unmodified name from the engine, some times a variable is renamed by the compiler, e.g. in python a field called '__someVar' is renamed for runtime to 'Class__someVar'.
 }
 
+// Variable is the description of am actual value, that is referenced by a VariableID
 message Variable {
-  string type = 1; // the type of the variable (e.g string)
-  string value = 2; // the value of the variable as a string. All values are converted to string for simplicity. This can also result in the value being truncated if it is a very large string. Collection types should not be to stringed, instead a summary should be given as the value 'HashSet of size: 10'.
-  string hash = 3; // This is the hash of the object, this is primarily of use in Java/Python, node does not really have global object ids, so this is less useful. However using the debugger apis we are exposed the object ID at the time of collection. This can change depending on the script location as well (e.g. the stack frame). We send this object ID hashed to obfuscate any data. For non object values (that do not have an object ID) we hash the value.
-  repeated VariableID children = 4; // This is a list of children of this variable, using the var ids, requiring them to be looked up in the var lookup
-  optional bool truncated = 5; // true if the value has been truncated
+  string type = 1; // The type/class of the variable (e.g string)
+  string value = 2; // The value of the variable as a string. All values are converted to string for simplicity. This can also result in the value being truncated if it is a very large string. Collection types should not be to stringed, instead a summary should be given as the value 'HashSet of size: 10'.
+  string hash = 3; // This should be the object identity, and not the hashcode of the object. Use object hashcode if other info is not available.
+  repeated VariableID children = 4; // This is a list of the any variables that this variable references. To reduce duplication we use var_lookup to store and process variables by reference.
+  optional bool truncated = 5; // True if the value has been truncated
 }
 
+// StackFrame is the description of a executing code frame that has been captured by the tracepoint.
 message StackFrame {
-  string file_name = 1; //This is the full path of the file where the line of code is paused.
+  string file_name = 1; // This is the full path of the file where the line of code is paused.
   string method_name = 2; // This is the method or function name that is being called.
-  uint32 line_number = 3; //This is the line number where the program is paused.
-  optional string class_name = 4; //The class name of where the function is defined
-  optional bool is_async = 5; //This indicates that the frame is an async frame
-  optional uint32 column_number = 6; //This is the column number for the line, primarily used in node.
-  optional string transpiled_file_name = 7; //The name of the transpiled file. If we have mappings available we can map the file 'something.js' to the original typescript. This will be the transpiled file name e.g. something.js
-  optional uint32 transpiled_line_number = 8; //The transpiled line number
-  optional uint32 transpiled_column_number = 9; //The transpiled column number
-  repeated VariableID variables = 10; //This is the list of variables (using var ids) that are present at this point in the code.
-  optional bool app_frame = 11; //This indicates if the frame is from inside the app, or is from a library
-  optional bool native_frame = 12; //This indicates if the frame, from a native library (primarily used in Java)
+  uint32 line_number = 3; // This is the line number where the program is paused.
+  optional string class_name = 4; // The class name of where the method is defined
+  optional bool is_async = 5; // This indicates that the frame is an async frame
+  optional uint32 column_number = 6; // This is the column number for the line, primarily used in node.
+  optional string transpiled_file_name = 7; // The name of the transpiled file. If we have mappings available we can map the file 'something.js' to the original typescript. This will be the transpiled file name e.g. something.js
+  optional uint32 transpiled_line_number = 8; // The transpiled line number
+  optional uint32 transpiled_column_number = 9; // The transpiled column number
+  repeated VariableID variables = 10; // This is the list of variables (using var ids) that are present at this point in the code.
+  optional bool app_frame = 11; // This indicates if the frame is from inside the app, or is from a library
+  optional bool native_frame = 12; // This indicates if the frame, from a native library (primarily used in Java)
 }
 
+// WatchResult is the result of a watch expression being executed.
 message WatchResult {
   string expression = 1; // the expression executed to collect the data
   oneof result {
-    VariableID good_result = 2;  // the ID of the variable that represents the result
-    string error_result = 3;  // this is to contain the error message generated if the watch expression fails
+    VariableID good_result = 2;  // The VariableID of the variable that represents the result, if the expression completed successfully.
+    string error_result = 3;  // This is to contain the error message generated if the watch expression fails.
   }
 }
 
+// Snapshot is the result of a tracepoint being executed.
 message Snapshot {
-  bytes ID = 1; // the client generated ID for this snapshot
-  TracePointConfig tracepoint = 2; // the config that was used to generate this snapshot (it could be deleted by the time we look at the data)
-  map<string, Variable> var_lookup = 3; // this is a flat list of all the collected variables for this snapshot, to reduce data size we dereference as much as we can
-  fixed64 ts_nanos = 4; // the time in nanos since 1970 when this snapshot was generated
-  repeated StackFrame frames = 5; // the active frames at the time the snapshot is generated
-  repeated WatchResult watches = 6; // the watches results
-  repeated deepproto.proto.common.v1.KeyValue attributes = 7; // the attributes for this snapshot (e.g file_name or line_no)
-  uint64 duration_nanos = 8; // the time in nano seconds it took to collect the data
-  repeated deepproto.proto.common.v1.KeyValue resource = 9; // the resource for this snapshot (e.g service.name)
+  bytes ID = 1; // The client generated ID for this snapshot
+  TracePointConfig tracepoint = 2; // The config that was used to generate this snapshot (it could be deleted by the time we look at the data)
+  map<string, Variable> var_lookup = 3; // This is a flat list of all the collected variables for this snapshot, to reduce data size we dereference as much as we can
+  fixed64 ts_nanos = 4; // The time in nanos since 1970 when this snapshot was generated
+  repeated StackFrame frames = 5; // The active frames at the time the snapshot is generated
+  repeated WatchResult watches = 6; // The watches results
+  repeated deepproto.proto.common.v1.KeyValue attributes = 7; // The attributes for this snapshot (e.g file_name or line_no)
+  uint64 duration_nanos = 8; // The time in nano seconds it took to collect the data
+  repeated deepproto.proto.common.v1.KeyValue resource = 9; // The resource for this client, should match the resource sent with a PollRequest.
 }
 
+// SnapshotResponse this is the response from the server, when it receives a Snapshot
 message SnapshotResponse {
 
 }

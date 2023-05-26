@@ -24,22 +24,26 @@ option java_multiple_files = true;
 option java_package = "com.intergral.deep.proto.poll.v1";
 option go_package = "github.com/intergral/go-deep-proto/poll/v1";
 
+// PollRequest is sent by the client to check its current config with the server.
 message PollRequest {
-  fixed64 ts_nanos = 1; //time message was sent, acts as message id (useful for tracing)
-  string current_hash = 2; //some id that represents the clients current config, or null if no current config
-  deepproto.proto.resource.v1.Resource resource = 3; //this is the attributes that describe the resource requesting a config (e.g. service.name: shop-service)
+  fixed64 ts_nanos = 1; //The time (as epoch nanos) when the message was sent, acts as message ID.
+  string current_hash = 2; //This should the the hash that was last sent by the server, this is used to determine if the config has changed since the last poll. If no hash is available (e.g. first poll) then do not set this value.
+  deepproto.proto.resource.v1.Resource resource = 3; //The attributes that represent the client making the request. These attributes are used to filter the tracepoint response to just the tracepoints that are for the requesting client.
 }
 
+// ResponseType is used to indicate if the response from the server should trigger an update of the client config.
+// If the client sends the same 'current_hash' as that which the server has for the client, then the server will response with 'NO_CHANGE'. This allows the client to not trigger any changes to the current tracepoint configs.
 enum ResponseType {
-  NO_CHANGE = 0; // This is sent when the 'currentHash' from the request is the same as the response. So the client should do nothing.
+  NO_CHANGE = 0; // This is sent when the 'current_hash' from the request is the same as the response. So the client should do nothing.
   UPDATE = 1; // This is sent when the client should process the response to update the config.
 }
 
+// PollResponse is the response the server will send in response to a PollRequest.
 message PollResponse {
-  fixed64 ts_nanos = 1; //time message was sent, acts as message id (useful for tracing)
-  string current_hash = 2; //some id that represents the clients current config, or null if no current config
-  repeated deepproto.proto.tracepoint.v1.TracePointConfig response = 3; // this would be the list of dynamic configs that are to be installed. This should be the full set, not a partial or delta. Can be null if the response type is 'no-change'
-  ResponseType response_type = 4; // This indicates if the config has changed or not. if 'no-change' then 'response' will be null/empty
+  fixed64 ts_nanos = 1; //The time (as epoch nanos) then he message was sent. This should match the 'ts_nanos' from the triggering PollRequest.
+  string current_hash = 2; //This is the hash that the server has assigned this current config for this client. This should be sent with the next PollRequest.
+  repeated deepproto.proto.tracepoint.v1.TracePointConfig response = 3; //This is the list of tracepoints that are currently configured for this client.
+  ResponseType response_type = 4; // This indicates if the config has changed or not. If 'NO_CHANGE' then 'response' should be null or empty.
 }
 
 // This is how the application agent should request the config of the tracepoints.

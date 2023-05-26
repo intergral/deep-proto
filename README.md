@@ -23,3 +23,6 @@ To release this we use GitHub Actions when a new release is tagged via GitHub.
 
 # Licensing
 See [LICENSING](LICENSING.md)
+
+# Documentation
+The docs are auto generated from the protobuf. They are then hosted on github pages [here](https://intergral.github.io/deep-proto/common/).

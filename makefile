@@ -43,7 +43,7 @@ gen-go:
 gen-java:
 	OUT_DIR=$(ROOT_DIR)/build/java/src/main/java PROTOC_ARGS=--java_out=$(ROOT_DIR)/build/java/src/main/java GRPC_PROTOC_ARGS=--grpc-java_out=$(ROOT_DIR)/build/java/src/main/java $(MAKE) gen-proto
 	cp $(ROOT_DIR)/pom.xml $(ROOT_DIR)/build/java/pom.xml
-	mvn -f $(ROOT_DIR)/build/java/pom.xml clean package
+	mvn -U -B -f $(ROOT_DIR)/build/java/pom.xml clean package
 
 .PHONY: gen-all
 gen-all:

@@ -82,10 +82,13 @@ rel-go: check-version gen-go
 
 	cp -r $(ROOT_DIR)/build/go/github.com/intergral/go-deep-proto/* $(ROOT_DIR)/go-deep-proto
 
+	cd $(PROJECT_ROOT)/go-deep-proto; git config user.name github-actions
+
+	cd $(PROJECT_ROOT)/go-deep-proto; git config user.email github-actions@github.com
 
 	cd $(PROJECT_ROOT)/go-deep-proto; git add .
 
-	cd $(PROJECT_ROOT)/go-deep-proto; git commit --author="Github <action@github.com>" -m "Published new api version from $(VERSION)" || echo "No changes, nothing to commit!"
+	cd $(PROJECT_ROOT)/go-deep-proto; git commit -m "Published new api version from $(VERSION)" || echo "No changes, nothing to commit!"
 
 	cd $(PROJECT_ROOT)/go-deep-proto; git push -u origin HEAD:master
 

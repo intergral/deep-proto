@@ -1,0 +1,12 @@
+site_name: Deep Proto Docs
+theme:
+  name: material
+
+nav:
+  - Common: common.md
+  - Resource: resource.md
+  - Poll: poll.md
+  - Tracepoint: tracepoint.md
+
+extra_css:
+  - 'styles.css'

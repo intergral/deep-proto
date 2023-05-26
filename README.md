@@ -1,6 +1,7 @@
-![PyPI](https://img.shields.io/pypi/v/deep-proto)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/intergral/go-deep-proto?label=golang)
-
+[![PyPI](https://img.shields.io/pypi/v/deep-proto)](https://pypi.org/project/deep-proto/)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/tag/intergral/go-deep-proto?label=golang)](https://github.com/intergral/go-deep-proto)
+[![Maven Central](https://img.shields.io/maven-central/v/com.intergral.deep/deep-proto)](https://central.sonatype.com/artifact/com.intergral.deep/deep-proto)
+[![Release Proto](https://github.com/intergral/deep-proto/actions/workflows/release.yml/badge.svg)](https://github.com/intergral/deep-proto/actions/workflows/release.yml)
 
 # Language Independent Interface Types For DEEP
 
@@ -14,3 +15,11 @@ To generate the raw gRPC client libraries, use `make gen-${LANGUAGE}`. Currently
 
 * python
 * golang
+* java
+
+# Releasing
+
+To release this we use GitHub Actions when a new release is tagged via GitHub.
+
+# Licensing
+See [LICENSING](LICENSING.md)

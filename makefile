@@ -1,3 +1,18 @@
+#     Copyright (C) 2023  Intergral GmbH
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 .DEFAULT_GOAL := gen-all
 
 PROJECT_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -50,6 +65,13 @@ gen-all:
 	$(MAKE) gen-go
 	$(MAKE) gen-python
 	$(MAKE) gen-java
+
+.PHONY: gen-docs
+gen-docs:
+	docker run --rm -u ${shell id -u}  -v $(ROOT_DIR)/docs:/out -v $(ROOT_DIR):/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,tracepoint.md deepproto/proto/tracepoint/v1/tracepoint.proto
+	docker run --rm -u ${shell id -u}  -v $(ROOT_DIR)/docs:/out -v $(ROOT_DIR):/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,poll.md deepproto/proto/poll/v1/poll.proto
+	docker run --rm -u ${shell id -u}  -v $(ROOT_DIR)/docs:/out -v $(ROOT_DIR):/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,common.md deepproto/proto/common/v1/common.proto
+	docker run --rm -u ${shell id -u}  -v $(ROOT_DIR)/docs:/out -v $(ROOT_DIR):/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,resource.md deepproto/proto/resource/v1/resource.proto
 
 .PHONY: check-version
 check-version:

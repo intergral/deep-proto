@@ -36,6 +36,7 @@ jobs:
           path: _site
 
   build-mvn-site:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -51,6 +52,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Mk docs
+          path: _site
       - name: Include site
         run: mv build/java/target/site ./_site/mvn
       - name: Upload artifact

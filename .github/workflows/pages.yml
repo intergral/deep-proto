@@ -30,7 +30,7 @@ jobs:
       - run: pip install mkdocs-material
       - run: mkdocs build -d./_site
       - name: Upload artifact
-        uses: actions/upload-artifacts@v3
+        uses: actions/upload-artifact@v3
         with:
           name: Mk docs
           path: _site

@@ -75,6 +75,7 @@ gen-docs:
 
 .PHONY: gen-mvn-site
 gen-mvn-site: gen-java
+	mkdir -p $(ROOT_DIR)/build/java/src/site/markdown
 	cp $(ROOT_DIR)/java/site.xml $(ROOT_DIR)/build/java/src/site/site.xml
 	cp $(ROOT_DIR)/README_JAVA.md $(ROOT_DIR)/build/java/src/site/markdown/README.md
 	mvn -U -B -f $(ROOT_DIR)/build/java/pom.xml site
@@ -149,3 +150,8 @@ endif
 rel-java: check-version check-java-env gen-java
 	mvn -f $(ROOT_DIR)/build/java/pom.xml versions:set -DnewVersion=$(VERSION) -B -U
 	mvn -f $(ROOT_DIR)/build/java/pom.xml -s .ci-settings.xml clean deploy -P release-ossrh -B -U
+
+
+.PHONY: clean
+clean:
+	rm -Rf site _site build

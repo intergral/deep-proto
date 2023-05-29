@@ -73,6 +73,12 @@ gen-docs:
 	docker run --rm -u ${shell id -u}  -v $(ROOT_DIR)/docs:/out -v $(ROOT_DIR):/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,common.md deepproto/proto/common/v1/common.proto
 	docker run --rm -u ${shell id -u}  -v $(ROOT_DIR)/docs:/out -v $(ROOT_DIR):/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,resource.md deepproto/proto/resource/v1/resource.proto
 
+.PHONY: gen-mvn-site
+gen-mvn-site: gen-java
+	cp $(ROOT_DIR)/java/site.xml $(ROOT_DIR)/build/java/src/site/site.xml
+	cp $(ROOT_DIR)/README_JAVA.md $(ROOT_DIR)/build/java/src/site/markdown/README.md
+	mvn -U -B -f $(ROOT_DIR)/build/java/pom.xml site
+
 .PHONY: check-version
 check-version:
 ifdef v

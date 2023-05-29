@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "deep-proto"
 description = "DEEP Python Protobuf"
-readme = "../../README.md"
+readme = "../../README_PYTHON.md"
 license = "AGPL-3.0-only"
 requires-python = ">3.7"
 authors = [
@@ -13,9 +13,9 @@ authors = [
     { name = "Ben Donnelly", email = "b.w.donnelly1@gmail.com" }
 ]
 classifiers = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",

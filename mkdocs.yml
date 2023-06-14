@@ -7,6 +7,8 @@ repo_url: https://github.com/intergral/deep-proto
 copyright: Intergral GmbH 2023
 
 theme:
+  logo: https://github.com/intergral/deep/blob/master/docs/docs/images/logo/icon.png?raw=true
+  favicon: https://github.com/intergral/deep/blob/master/docs/docs/images/logo/icon.svg?raw=true
   name: material
 
 nav:

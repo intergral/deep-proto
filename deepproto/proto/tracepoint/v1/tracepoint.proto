@@ -85,6 +85,7 @@ message Snapshot {
   repeated deepproto.proto.common.v1.KeyValue attributes = 7; // The attributes for this snapshot (e.g file_name or line_no)
   uint64 duration_nanos = 8; // The time in nano seconds it took to collect the data
   repeated deepproto.proto.common.v1.KeyValue resource = 9; // The resource for this client, should match the resource sent with a PollRequest.
+  optional string log_msg = 10; // The processed log message if the tracepoint had a log message configured.
 }
 
 // SnapshotResponse this is the response from the server, when it receives a Snapshot

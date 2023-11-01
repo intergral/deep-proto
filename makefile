@@ -49,6 +49,7 @@ gen-proto: check-proto
 gen-python:
 	OUT_DIR=$(ROOT_DIR)/build/python PROTOC_ARGS=--python_out=$(ROOT_DIR)/build/python GRPC_PROTOC_ARGS=--grpc-python_out=$(ROOT_DIR)/build/python $(MAKE) gen-proto
 	cp $(ROOT_DIR)/pyproject.toml $(ROOT_DIR)/build/python
+	cp $(ROOT_DIR)/README_PYTHON.md $(ROOT_DIR)/build/python/README_PYTHON.md
 
 .PHONY: gen-go
 gen-go:

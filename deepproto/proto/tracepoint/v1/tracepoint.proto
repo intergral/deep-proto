@@ -63,6 +63,7 @@ message StackFrame {
   repeated VariableID variables = 10; // This is the list of variables (using var ids) that are present at this point in the code.
   optional bool app_frame = 11; // This indicates if the frame is from inside the app, or is from a library
   optional bool native_frame = 12; // This indicates if the frame, from a native library (primarily used in Java)
+  optional string short_path = 13; // This is the short path to the file (e.g. /simple-app/main.py instead of /home/ben/repo/app/simple-app/main.py).
 }
 
 // WatchResult is the result of a watch expression being executed.

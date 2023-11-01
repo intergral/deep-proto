@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "deep-proto"
 description = "DEEP Python Protobuf"
-readme = "../../README_PYTHON.md"
+readme = "README_PYTHON.md"
 license = "AGPL-3.0-only"
 requires-python = ">3.7"
 authors = [

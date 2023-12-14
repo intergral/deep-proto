@@ -30,6 +30,36 @@ message TracePointConfig {
   map<string, string> args = 4; // Arbitrary key/kay of config values (this can contain conditions, logs, fire counts etc)
   repeated string watches = 5;  // Expressions to evaluate at the this point of the code
   repeated deepproto.proto.common.v1.KeyValue targeting = 6; // The targeting config for this tracepoint, used by the server to filter response.
+  repeated Metric metrics = 7; // List of metric rules to apply at this point in the code
+}
+
+// The types of metric to create
+enum MetricType {
+  COUNTER = 0;
+  GAUGE = 1;
+  HISTOGRAM = 2;
+  SUMMARY = 3;
+}
+
+// Metric describes a metric rule to apply at this point.
+message Metric {
+  string name = 1; // The name of the metric
+  repeated LabelExpression labelExpressions = 2; // The metric labels
+  MetricType type = 3; // The type of metric to generate
+
+  optional string expression = 4; // The result of this expression will become the metric value.
+  optional string namespace = 5; // The namespace to set on the metric
+  optional string help = 6; // The help statement to attach to the metric
+  optional string unit = 7; // The unit associated with this value
+}
+
+// LabelExpression describes a label that should be evaluated and the value used as the label
+message LabelExpression  {
+  string key = 1; // The label key
+  oneof value {
+    deepproto.proto.common.v1.AnyValue static = 2; // The label value
+    string expression = 3; // The label expression
+  }
 }
 
 // VariableID is used to identify a variable on a stack frame or as a child of another variable.
@@ -73,6 +103,7 @@ message WatchResult {
     VariableID good_result = 2;  // The VariableID of the variable that represents the result, if the expression completed successfully.
     string error_result = 3;  // This is to contain the error message generated if the watch expression fails.
   }
+  optional bool from_metric = 4; // Is this the result of a metric, or metric tag
 }
 
 // Snapshot is the result of a tracepoint being executed.

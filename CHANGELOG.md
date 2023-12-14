@@ -1,6 +1,7 @@
 # 1.0.3 (xx/xx/2023)
 
  - **[FEATURE]**: add metric definition models [#6](https://github.com/intergral/deep-proto/pull/6) [@Umaaz](https://github.com/Umaaz)
+ - **[FEATURE]**: add watch source to models [#8](https://github.com/intergral/deep-proto/pull/8) [@Umaaz](https://github.com/Umaaz)
 
 
 # 1.0.2 (01/11/2023)

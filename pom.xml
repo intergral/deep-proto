@@ -21,7 +21,7 @@
 
     <groupId>com.intergral.deep</groupId>
     <artifactId>deep-proto</artifactId>
-    <version>0.0.1-snapshot</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 

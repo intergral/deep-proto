@@ -61,6 +61,10 @@ gen-java:
 	cp $(ROOT_DIR)/pom.xml $(ROOT_DIR)/build/java/pom.xml
 	mvn -U -B -f $(ROOT_DIR)/build/java/pom.xml clean package
 
+.PHONY: install-java
+install-java: gen-java
+	mvn -U -B -f $(ROOT_DIR)/build/java/pom.xml install
+
 .PHONY: gen-all
 gen-all:
 	$(MAKE) gen-go

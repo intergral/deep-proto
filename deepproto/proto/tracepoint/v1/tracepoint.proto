@@ -96,6 +96,13 @@ message StackFrame {
   optional string short_path = 13; // This is the short path to the file (e.g. /simple-app/main.py instead of /home/ben/repo/app/simple-app/main.py).
 }
 
+// WatchSource is the logical source of the watch expression used to generate a result.
+enum WatchSource {
+    WATCH = 0; // A user attached this as an expression
+    LOG = 1; // A watch expression from a log
+    METRIC = 2; // A watch expression from a metric value or tag
+}
+
 // WatchResult is the result of a watch expression being executed.
 message WatchResult {
   string expression = 1; // the expression executed to collect the data
@@ -103,7 +110,8 @@ message WatchResult {
     VariableID good_result = 2;  // The VariableID of the variable that represents the result, if the expression completed successfully.
     string error_result = 3;  // This is to contain the error message generated if the watch expression fails.
   }
-  optional bool from_metric = 4; // Is this the result of a metric, or metric tag
+  optional bool from_metric = 4; // Is this the result of a metric, or metric tag @Deprecated
+  WatchSource source = 5; // This is the source of the watch result. e.g. did the watch come from a watch input, a log message or a metric
 }
 
 // Snapshot is the result of a tracepoint being executed.

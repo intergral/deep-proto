@@ -71,7 +71,7 @@
 
 
     <properties>
-        <grpc.version>1.59.0</grpc.version>
+        <grpc.version>1.59.1</grpc.version>
 
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

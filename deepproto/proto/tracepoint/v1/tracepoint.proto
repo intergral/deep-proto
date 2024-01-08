@@ -101,6 +101,7 @@ enum WatchSource {
     WATCH = 0; // A user attached this as an expression
     LOG = 1; // A watch expression from a log
     METRIC = 2; // A watch expression from a metric value or tag
+    CAPTURE = 3; // A watch expression generated from a capture: e.g. thrown, return, duration
 }
 
 // WatchResult is the result of a watch expression being executed.

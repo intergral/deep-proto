@@ -1,8 +1,11 @@
 # main (xx/xx/2024)
 
-# 1.0.4 (08/01/2024)
+# 1.0.5 (11/01/2024)
 
  - **[FEATURE]**: add watch source CAPTURE [#12](https://github.com/intergral/deep-proto/pull/12) [@Umaaz](https://github.com/Umaaz)
+
+# 1.0.4 (08/01/2024)
+Release pulled due to build failures. Rereleased as 1.0.5.
 
 # 1.0.3 (14/12/2023)
 
